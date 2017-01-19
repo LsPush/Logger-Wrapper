@@ -63,5 +63,9 @@
 
     No. You can see the sample for how to use Logger as the default Log implement.
 
-## Get start
+## Getting start
 
+``` groovy
+debugCompile('com.decay.logger:logger-wrapper:0.1.0:debug@aar')
+releaseCompile('com.decay.logger:logger-wrapper:0.1.0:release@aar')
+```
