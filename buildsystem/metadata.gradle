@@ -2,11 +2,11 @@ ext {
     Properties properties = new Properties()
     boolean isExists = false;
     try {
-        File file = project.rootProject.file('logger.properties')
+        File file = project.rootProject.file('project.properties')
         isExists = file.exists();
         if (isExists) properties.load(file.newDataInputStream())
     } catch (Throwable ignored) {
-        project.logger.log(LogLevel.WARN, "don't has logger.properties file")
+        project.logger.log(LogLevel.WARN, "don't has project.properties file")
     }
 
     metadata = [
