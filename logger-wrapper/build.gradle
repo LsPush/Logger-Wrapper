@@ -25,7 +25,8 @@ android {
 
     // http://qiita.com/gfx/items/bdfd09a3286f2fc4aef4
     // http://www.jianshu.com/p/1907bffef0a3
-    publishNonDefault true
+    // Note: for support link sourceJar and javadocJar, disable support for this
+    // publishNonDefault true
 }
 
 dependencies {

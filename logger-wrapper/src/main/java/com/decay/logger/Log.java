@@ -27,6 +27,7 @@ public class Log {
     private boolean debug;
     private LinkedList<AbstractLog> logs = new LinkedList<>();
     private AndroidLog androidLog = null;
+    private String subTag; // tag for sub level
 
     /**
      * The minimum stack trace index, starts at this class after two native calls.
@@ -77,6 +78,14 @@ public class Log {
     }
     // endregion
 
+    public String getSubTag() {
+        return subTag;
+    }
+
+    public void setSubTag(String subTag) {
+        this.subTag = subTag;
+    }
+
     // region custom logger
     public Log bindLogger(AbstractLog log) {
         log.prepareLogger(tag);
@@ -98,11 +107,11 @@ public class Log {
         return this;
     }
 
-    private String formatTag(String tag) {
-        if (!TextUtils.isEmpty(tag) && !this.tag.equals(tag)) {
-            return this.tag + "-" + tag;
-        }
-        return this.tag;
+    private String formatTag(String localTag) {
+        String finalTag = tag;
+        if (!TextUtils.isEmpty(subTag)) finalTag += "-" + subTag;
+        if (!TextUtils.isEmpty(localTag)) finalTag += "-" + localTag;
+        return finalTag;
     }
 
     private String getFinalTag() {

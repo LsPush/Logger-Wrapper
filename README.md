@@ -6,16 +6,7 @@
 
     You can use `log.debug(boolean)` to modify the debug/release switch.
 
-    By default, it use library's BuildConfig.DEBUG, but it set `publishNonDefault true` in the gradle. So you can change buildType in gradle (See 2).
-
 2. zero config or don't worry about duplicate config.
-
-    Using this library, you can simply config the debug/release state in gradle by using
-
-    ``` groovy
-    debugCompile project(path: ':logger-wrapper', configuration: 'debug')
-    releaseCompile project(path: ':logger-wrapper', configuration: 'release')
-    ```
 
     When you need to log, using `Logger.tag(Your_Tag)` to get the log instance. I recommend to store the instance in class level.
 
@@ -34,6 +25,8 @@
 3. optimized android log as default log implement and support log thread name, source jump, time measure.
 
 4. smart `log(...)` function.
+
+5. subTag feature.
 
 ## Architecture Design
 
@@ -66,6 +59,11 @@
 ## Getting start
 
 ``` groovy
-debugCompile('com.decay.logger:logger-wrapper:0.1.0:debug@aar')
-releaseCompile('com.decay.logger:logger-wrapper:0.1.0:release@aar')
+compile('com.decay.logger:logger-wrapper:0.1.1')
+```
+
+Get a log instance: 
+
+```java
+Log log = Logger.tag(YOUR_TAG).debug(BuildConfig.DEBUG);
 ```
