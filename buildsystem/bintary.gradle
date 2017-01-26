@@ -58,7 +58,7 @@ bintray {
         vcsUrl = VCS_URL
         licenses = ["Apache-2.0"]
         publish = true
-        override = false
+        override = true
     }
 }
 

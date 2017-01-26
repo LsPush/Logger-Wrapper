@@ -22,16 +22,16 @@ import android.text.TextUtils;
 import java.security.InvalidParameterException;
 
 public class Logger {
-    private static ArrayMap<String, Log> logs = new ArrayMap<>(1);
+    private static ArrayMap<String, BasicLog> logs = new ArrayMap<>(1);
 
-    public static Log tag(@NonNull String tag) {
+    public static BasicLog tag(@NonNull String tag) {
         if (isEmpty(tag)) {
             throw new InvalidParameterException("Tag should not be null or empty");
         }
 
-        Log log = logs.get(tag);
+        BasicLog log = logs.get(tag);
         if (log == null) {
-            log = new Log(tag);
+            log = new BasicLog(tag);
             logs.put(tag, log);
         }
         return log;

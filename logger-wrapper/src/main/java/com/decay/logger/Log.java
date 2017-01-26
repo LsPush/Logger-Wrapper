@@ -16,90 +16,16 @@
 package com.decay.logger;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
-import java.util.LinkedList;
-
-public class Log {
-    private final String tag; // basic tag
-    private int priority; // default message level
-    private int filter; // release filter
-    private boolean debug;
-    private LinkedList<AbstractLog> logs = new LinkedList<>();
-    private AndroidLog androidLog = null;
-    private String subTag; // tag for sub level
-
+public abstract class Log {
+    public static final int SMART_PRIORITY = -1;
     /**
      * The minimum stack trace index, starts at this class after two native calls.
      */
     private static final int MIN_STACK_OFFSET = 3;
 
-    // region create and config
-    public Log(@NonNull String tag) {
-        this.tag = tag;
-        this.priority = android.util.Log.DEBUG;
-        this.filter = android.util.Log.WARN;
-        this.debug = BuildConfig.DEBUG;
-    }
-
-    public Log debug(boolean debug) {
-        this.debug = debug;
-        return this;
-    }
-
-    public boolean isDebug() {
-        return debug;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public Log priority(int priority) {
-        this.priority = priority;
-        return this;
-    }
-
-    public int getFilter() {
-        return filter;
-    }
-
-    public Log filter(int filter) {
-        this.filter = filter;
-        return this;
-    }
-
-    public boolean isLoggable() {
-        return debug || priority >= filter;
-    }
-
-    private boolean isLoggable(int priority) {
-        return debug || priority >= filter;
-    }
-    // endregion
-
-    public String getSubTag() {
-        return subTag;
-    }
-
-    public void setSubTag(String subTag) {
-        this.subTag = subTag;
-    }
-
-    // region custom logger
-    public Log bindLogger(AbstractLog log) {
-        log.prepareLogger(tag);
-        logs.add(log);
-        return this;
-    }
-
-    public void unbindLogger(AbstractLog log) {
-        logs.remove(log);
-    }
-    // endregion
-
     // region local tag (subTag)
-    private ThreadLocal<String> localTag = new ThreadLocal<>();
+    protected ThreadLocal<String> localTag = new ThreadLocal<>();
 
     // local tag
     public Log tag(@NonNull String tag) {
@@ -107,48 +33,23 @@ public class Log {
         return this;
     }
 
-    private String formatTag(String localTag) {
-        String finalTag = tag;
-        if (!TextUtils.isEmpty(subTag)) finalTag += "-" + subTag;
-        if (!TextUtils.isEmpty(localTag)) finalTag += "-" + localTag;
-        return finalTag;
-    }
-
-    private String getFinalTag() {
+    public String getLocalTag() {
         String tag = localTag.get();
         if (tag != null) localTag.remove();
-        return formatTag(tag);
+        return tag;
     }
-    // endregion
 
     // region smart log
     public void log(Throwable throwable) {
-        prepareLog(mergePriority(throwable), throwable, null);
+        prepareLog(SMART_PRIORITY, throwable, null);
     }
 
     public void log(String message, Object... args) {
-        prepareLog(mergePriority(null), null, message, args);
+        prepareLog(SMART_PRIORITY, null, message, args);
     }
 
     public void log(Throwable throwable, String message, Object... args) {
-        prepareLog(mergePriority(throwable), throwable, message, args);
-    }
-
-    /**
-     * Merge priority for {@link Log#log(Throwable, String, Object...)}
-     *
-     * Serve as method for protect stack depth
-     */
-    private int mergePriority(Throwable throwable) {
-        int p;
-        if (throwable == null) {
-            p = priority;
-        } else if (priority <= android.util.Log.INFO) {
-            p = android.util.Log.WARN;
-        } else {
-            p = android.util.Log.ERROR;
-        }
-        return p;
+        prepareLog(SMART_PRIORITY, throwable, message, args);
     }
     // endregion
 
@@ -226,40 +127,6 @@ public class Log {
     }
     // endregion
 
-    // region log core
-    private void prepareLog(int priority, Throwable cause, String message, Object... args) {
-        if (!isLoggable(priority)) return;
-
-        //do it first for making sure resuming tag
-        String finalTag = getFinalTag();
-
-        String finalMsg = null;
-        if (message == null) {
-            if (cause == null) return; // swallow
-        } else {
-            finalMsg = String.format(message, args);
-        }
-
-        if (logs.size() == 0) {
-            ensureAndroidLog();
-            if (androidLog.isLoggable(debug, priority, tag)) {
-                androidLog.log(priority, finalTag, tag, finalMsg, cause);
-            }
-            return;
-        }
-
-        for (AbstractLog log : logs) {
-            if (log.isLoggable(debug, priority, tag)) {
-                log.log(priority, finalTag, tag, finalMsg, cause);
-            }
-        }
-    }
-
-    private void ensureAndroidLog() {
-        if (androidLog == null) androidLog = new AndroidLog();
-    }
-    // endregion
-
     // region thread and source jump features
     public Log logThread() {
         log("~~> Thread: " + Thread.currentThread().getName());
@@ -314,8 +181,8 @@ public class Log {
     // endregion
 
     // region timing logger
-    public TimingLogger createTimingLogger(String label) {
-        return new TimingLogger(priority, tag, label);
-    }
+    public abstract TimingLogger createTimingLogger(String label);
     // endregion
+
+    protected abstract void prepareLog(int priority, Throwable cause, String message, Object... args);
 }
