@@ -59,7 +59,7 @@
 ## Getting start
 
 ``` groovy
-compile('com.decay.logger:logger-wrapper:0.1.2')
+compile('com.decay.logger:logger-wrapper:0.1.3')
 ```
 
 Get a log instance: 

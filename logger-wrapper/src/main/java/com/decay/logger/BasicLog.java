@@ -110,8 +110,10 @@ public class BasicLog extends Log {
         String finalMsg = null;
         if (message == null) {
             if (cause == null) return; // swallow
-        } else {
+        } else if (args != null) {
             finalMsg = String.format(message, args);
+        } else {
+            finalMsg = message;
         }
 
         if (logs.size() == 0) {
