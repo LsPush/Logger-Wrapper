@@ -181,7 +181,7 @@ public abstract class Log {
     // endregion
 
     // region timing logger
-    public abstract TimingLogger createTimingLogger(String label);
+    public abstract TimingLog createTimingLogger(String label);
     // endregion
 
     protected abstract void prepareLog(int priority, Throwable cause, String message, Object... args);

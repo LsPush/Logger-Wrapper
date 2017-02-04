@@ -48,9 +48,9 @@ dependencies {
     compile("com.android.support:appcompat-v7:${SUPPORT_VERSION}")
     compile('com.orhanobut:logger:1.15')
 
-    debugCompile('com.decay.logger:logger-wrapper:0.1.0:debug@aar')
-    releaseCompile('com.decay.logger:logger-wrapper:0.1.0:release@aar')
+//    debugCompile('com.decay.logger:logger-wrapper:0.1.0:debug@aar')
+//    releaseCompile('com.decay.logger:logger-wrapper:0.1.0:release@aar')
 
-//    debugCompile project(path: ':logger-wrapper', configuration: 'debug')
-//    releaseCompile project(path: ':logger-wrapper', configuration: 'release')
+    compile project(':logger-wrapper')
+    //releaseCompile project(':logger-wrapper')
 }

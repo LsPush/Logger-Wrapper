@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Typical usage is:
  *
  * <pre>
- *     TimingLogger timings = new TimingLogger(TAG, "methodA");
+ *     TimingLog timings = new TimingLog(TAG, "methodA");
  *     // ... do some work A ...
  *     timings.addSplit("work A");
  *     // ... do some work B ...
@@ -45,7 +45,7 @@ import java.util.ArrayList;
  *     D/TAG     ( 3459): methodA: end, 16 ms
  * </pre>
  */
-public class TimingLogger {
+public class TimingLog {
     private String tag;
     private int priority;
     private boolean disabled;
@@ -54,7 +54,7 @@ public class TimingLogger {
     private ArrayList<Long> splits;
     private ArrayList<String> splitLabels;
 
-    TimingLogger(int priority, String tag, String label) {
+    TimingLog(int priority, String tag, String label) {
         this.priority = priority;
         this.tag = tag;
         reset(label);

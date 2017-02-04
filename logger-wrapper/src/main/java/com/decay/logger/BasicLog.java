@@ -89,8 +89,8 @@ public class BasicLog extends Log {
     // endregion
 
     @Override
-    public TimingLogger createTimingLogger(String label) {
-        return new TimingLogger(priority, tag, label);
+    public TimingLog createTimingLogger(String label) {
+        return new TimingLog(priority, tag, label);
     }
 
     public SubLog subTag(String tag) {
@@ -110,7 +110,7 @@ public class BasicLog extends Log {
         String finalMsg = null;
         if (message == null) {
             if (cause == null) return; // swallow
-        } else if (args != null) {
+        } else if (args != null && args.length > 0) {
             finalMsg = String.format(message, args);
         } else {
             finalMsg = message;

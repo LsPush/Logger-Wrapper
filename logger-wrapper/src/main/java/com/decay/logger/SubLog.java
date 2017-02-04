@@ -29,7 +29,7 @@ public class SubLog extends Log {
     }
 
     @Override
-    public TimingLogger createTimingLogger(String label) {
+    public TimingLog createTimingLogger(String label) {
         ensureLog();
         return basicLog.createTimingLogger(label);
     }

@@ -3,9 +3,9 @@ package com.decay.logger.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.decay.logger.Log;
+import com.decay.logger.BasicLog;
 import com.decay.logger.Logger;
-import com.decay.logger.TimingLogger;
+import com.decay.logger.TimingLog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +14,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log androidLog = Logger.tag("LogWithDefaultAndroidLog");
+        Logger.tag("args").debug(BuildConfig.DEBUG).log("args&");
+
+        BasicLog androidLog = Logger.tag("LogWithDefaultAndroidLog");
 
         androidLog.log("normal log");
         androidLog.debug(BuildConfig.DEBUG).filter(android.util.Log.WARN).priority(android.util.Log.INFO);
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         androidLog.w("good");
         androidLog.e(new Throwable("Hello Exception"));
 
-        Log loggerLog = Logger.tag("LogWithCustomLogger");
+        BasicLog loggerLog = Logger.tag("LogWithCustomLogger");
         loggerLog.bindLogger(new DebugLog());
         loggerLog.log(new Throwable("Logger"), "hello %s", "cause");
         loggerLog.log("info log");
@@ -45,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         public static final String TAG_MYJOB = "TAG_MYJOB";
 
         public void run() {
-            TimingLogger timings = Logger.tag(TAG_MYJOB).createTimingLogger("MyJob");
+            BasicLog basicLog = Logger.tag(TAG_MYJOB);
+            TimingLog timings = Logger.tag(TAG_MYJOB).createTimingLogger("MyJob");
 
             try {
                 sleep(2000);

@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 0.1.4 *(2017-02-04)*
+----------------------------
+
+    * fix issue when log bintary string with % and args is empty(not null), will cause java.util.MissingFormatArgumentException: Format specifier: &
+
 Version 0.1.3 *(2017-02-04)*
 ----------------------------
 
